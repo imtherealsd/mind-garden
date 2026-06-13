@@ -1,0 +1,17 @@
+{
+  "short_name": "MindGarden",
+  "name": "Mind Garden - Gamified Stress Management",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0A0E17",
+  "background_color": "#0A0E17",
+  "orientation": "portrait"
+}

@@ -1,6 +1,6 @@
 import { Sparkles, Compass } from 'lucide-react';
 
-export function Onboarding({ onSelectSeed }) {
+export function Onboarding({ onSelectSeed, navigateTo }) {
   const seeds = [
     {
       id: 'succulent',
@@ -154,10 +154,16 @@ export function Onboarding({ onSelectSeed }) {
         </div>
       </div>
 
-      <div className="text-center mt-6">
+      <div className="text-center mt-6 flex flex-col items-center space-y-2">
         <p className="text-[10px] text-slate-500 font-medium tracking-wider uppercase">
           Select a seed to begin your journey
         </p>
+        <button
+          onClick={() => navigateTo('/privacy-policy')}
+          className="text-[10px] text-slate-500 hover:text-slate-300 underline transition-colors cursor-pointer"
+        >
+          Privacy Policy
+        </button>
       </div>
     </div>
   );

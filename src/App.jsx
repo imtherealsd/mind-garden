@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGardenState } from './hooks/useGardenState';
 import { Onboarding } from './components/Onboarding';
 import { GardenCanvas } from './components/GardenCanvas';
@@ -8,7 +8,8 @@ import { BreathingMiniGame } from './components/BreathingMiniGame';
 import { DecorationShop } from './components/DecorationShop';
 import { TesterConsole } from './components/TesterConsole';
 import { AmbientBackground } from './components/AmbientBackground';
-import { Sprout, Wind, Sparkles, History, RotateCcw, Calendar, Sliders } from 'lucide-react';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
+import { Sprout, Wind, Sparkles, History, RotateCcw, Calendar, Sliders, ArrowLeft } from 'lucide-react';
 
 export default function App() {
   const gardenState = useGardenState();
@@ -42,6 +43,22 @@ export default function App() {
     return localStorage.getItem('mg-debug-enabled') === 'true';
   });
 
+  // Client-side routing state
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (path) => {
+    window.history.pushState({}, '', path);
+    setCurrentPath(path);
+  };
+
   const handleTitleClick = () => {
     setDebugClicks((prev) => {
       const next = prev + 1;
@@ -68,27 +85,42 @@ export default function App() {
         {/* Sparkly Top Header Bar */}
         <header className="px-5 py-4 border-b border-white/5 flex items-center justify-between bg-slate-950/80 backdrop-blur-md sticky top-0 z-30">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 theme-accent-bg flex items-center justify-center text-slate-950 font-display font-black text-sm shadow-md transition-all">
-              {seedType ? getCurrencySymbol(seedType) : 'M'}
-            </div>
+            {currentPath === '/privacy-policy' ? (
+              <button 
+                onClick={() => navigateTo('/')}
+                className="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 text-slate-300 transition-all active:scale-95 flex items-center justify-center cursor-pointer mr-1"
+                title="Back to Garden"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+            ) : (
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 theme-accent-bg flex items-center justify-center text-slate-950 font-display font-black text-sm shadow-md transition-all">
+                {seedType ? getCurrencySymbol(seedType) : 'M'}
+              </div>
+            )}
             <div>
               <h1 
                 onClick={handleTitleClick}
                 className="font-display font-bold text-sm tracking-tight text-white leading-tight cursor-pointer select-none active:opacity-75"
                 title="Tap 5 times for Developer Settings"
               >
-                Mind Garden
+                {currentPath === '/privacy-policy' ? 'Privacy Policy' : 'Mind Garden'}
               </h1>
-              {seedType && (
+              {currentPath !== '/privacy-policy' && seedType && (
                 <p className="text-[10px] text-slate-400 font-medium leading-none mt-0.5">
                   {getRoleTitle(seedType)} Journey • {getPlantName(seedType)}
+                </p>
+              )}
+              {currentPath === '/privacy-policy' && (
+                <p className="text-[10px] text-slate-400 font-medium leading-none mt-0.5">
+                  Legal Documentation
                 </p>
               )}
             </div>
           </div>
 
           <div className="flex items-center space-x-2">
-            {seedType && (
+            {currentPath !== '/privacy-policy' && seedType && (
               <div className="flex items-center space-x-1.5 bg-white/5 px-2 py-1 rounded-lg border border-white/10 text-[11px] font-bold theme-accent-text transition-all mr-1">
                 <Sparkles className="w-3.5 h-3.5 fill-current animate-pulse" />
                 <span>{essence}</span>
@@ -96,7 +128,7 @@ export default function App() {
             )}
             
             {/* Tester Sandbox Toggle (Hidden behind the 5-tap gesture) */}
-            {import.meta.env.DEV && debugEnabled && (
+            {currentPath !== '/privacy-policy' && import.meta.env.DEV && debugEnabled && (
               <button
                 onClick={() => setShowTester(!showTester)}
                 className={`p-1.5 rounded-lg border transition-all active:scale-95 touch-manipulation relative ${
@@ -114,7 +146,7 @@ export default function App() {
               </button>
             )}
             
-            {seedType && (
+            {currentPath !== '/privacy-policy' && seedType && (
               <button
                 onClick={() => setShowResetConfirm(true)}
                 className="p-1.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors active:scale-95 touch-manipulation"
@@ -128,9 +160,10 @@ export default function App() {
 
         {/* Content Container (Scrollable Area) */}
         <main className="flex-1 overflow-y-auto px-5 py-6 flex flex-col">
-          {/* Onboarding phase */}
-          {!seedType ? (
-            <Onboarding onSelectSeed={handleSelectSeed} />
+          {currentPath === '/privacy-policy' ? (
+            <PrivacyPolicy />
+          ) : !seedType ? (
+            <Onboarding onSelectSeed={handleSelectSeed} navigateTo={navigateTo} />
           ) : (
             <div className="flex-1 flex flex-col justify-between space-y-6">
               
@@ -244,6 +277,17 @@ export default function App() {
                       })}
                     </div>
                   )}
+
+                  {/* Privacy Policy Link in History Tab */}
+                  <div className="pt-4 text-center border-t border-white/5 flex flex-col items-center space-y-1">
+                    <button
+                      onClick={() => navigateTo('/privacy-policy')}
+                      className="text-[10px] text-slate-500 hover:text-slate-300 underline transition-colors cursor-pointer"
+                    >
+                      Privacy Policy
+                    </button>
+                    <p className="text-[9px] text-slate-600">Mind Garden © 2026</p>
+                  </div>
                 </div>
               )}
 
@@ -283,7 +327,7 @@ export default function App() {
         )}
 
         {/* Premium Bottom Tab Navigation Bar */}
-        {seedType && (
+        {currentPath !== '/privacy-policy' && seedType && (
           <nav className="border-t border-white/5 bg-slate-950/85 backdrop-blur-md px-4 py-2 flex justify-between items-center z-30 safe-pb">
             {/* Garden Tab */}
             <button

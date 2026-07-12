@@ -1,0 +1,23 @@
+{
+  "appId": "com.mindgarden.app",
+  "appName": "Mind Garden",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "launchAutoHide": true,
+      "backgroundColor": "#0A0E17",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    }
+  },
+  "android": {
+    "webContentsDebuggingEnabled": false,
+    "allowMixedContent": false,
+    "captureInput": false,
+    "useLegacyBridge": false
+  }
+}

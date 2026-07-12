@@ -190,7 +190,7 @@ export function PrivacyPolicy() {
             </div>
             <div className="flex items-center space-x-2 text-slate-300">
               <Mail className="w-3.5 h-3.5 text-emerald-400" />
-              <span><strong>Support Email:</strong> <a href="mailto:mindgarden.app@gmail.com" className="text-emerald-400 hover:underline">mindgarden.app@gmail.com</a></span>
+              <span><strong>Support Email:</strong> <a href="mailto:mindgarden.support@gmail.com" className="text-emerald-400 hover:underline">mindgarden.support@gmail.com</a></span>
             </div>
             <div className="flex items-center space-x-2 text-slate-300">
               <Globe className="w-3.5 h-3.5 text-emerald-400" />

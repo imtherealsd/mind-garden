@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "191991865346",
+    "project_id": "dimension-bird",
+    "storage_bucket": "dimension-bird.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191991865346:android:cde4a3c1a8462aeddfc71b",
+        "android_client_info": {
+          "package_name": "com.mindgarden.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYE7Bdl0q4e4B5QTTaqZNmRMucIBkKD00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

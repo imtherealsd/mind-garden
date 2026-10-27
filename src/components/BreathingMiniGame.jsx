@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, RotateCcw, Sparkles, Wind, CircleDot, Droplet, Zap, Infinity as InfinityIcon } from 'lucide-react';
+import { adService } from '../utils/adService';
 
-export function BreathingMiniGame({ onComplete, plantType }) {
+export function BreathingMiniGame({ onComplete, plantType, isPlusMember }) {
   const [gameState, setGameState] = useState('idle'); // 'idle' | 'breathing' | 'completed'
   const [timeLeft, setTimeLeft] = useState(60);
   const [cycleSeconds, setCycleSeconds] = useState(0);
@@ -355,20 +356,50 @@ export function BreathingMiniGame({ onComplete, plantType }) {
             </p>
           </div>
 
-          <div className="bg-slate-900/60 p-5 rounded-2xl border border-emerald-500/20 max-w-xs mx-auto text-center space-y-1">
+          <div className="bg-slate-900/60 p-5 rounded-2xl border border-emerald-500/20 max-w-xs mx-auto text-center space-y-2">
             <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Essence Reward Claimable</div>
             <div className="flex items-center justify-center space-x-1 text-garden-gold">
               <Sparkles className="w-5 h-5 fill-current animate-pulse" />
-              <span className="text-2xl font-display font-black">+15 {config.currencySymbol}</span>
+              <span className="text-2xl font-display font-black">
+                +{isPlusMember ? 30 : 15} {config.currencySymbol}
+              </span>
             </div>
+            {isPlusMember && (
+              <span className="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 inline-block">
+                👑 VIP 2x Multiplier Applied
+              </span>
+            )}
           </div>
 
-          <button
-            onClick={handleClaim}
-            className={`w-full max-w-xs h-14 bg-gradient-to-r ${config.buttonClass} font-display font-bold text-sm rounded-2xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center space-x-2 mx-auto touch-manipulation`}
-          >
-            <span>Claim & Return to Garden</span>
-          </button>
+          <div className="space-y-2.5 max-w-xs mx-auto">
+            {/* Standard Claim */}
+            <button
+              onClick={handleClaim}
+              className={`w-full h-13 bg-gradient-to-r ${config.buttonClass} font-display font-bold text-sm rounded-2xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center space-x-2 touch-manipulation cursor-pointer`}
+            >
+              <span>Claim & Return to Garden</span>
+            </button>
+
+            {/* Optional 2x Doubler with Zen Blessing */}
+            {!isPlusMember && (
+              <button
+                onClick={async () => {
+                  await adService.showRewardedAd({
+                    isPlus: false,
+                    onReward: () => {
+                      onComplete(30); // Award Double 30 Essence
+                      setGameState('idle');
+                      setTimeLeft(60);
+                      setCycleSeconds(0);
+                    }
+                  });
+                }}
+                className="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold text-xs hover:bg-amber-500/20 transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+              >
+                <span>✨ Double Reward (+30 {config.currencySymbol}) with Zen Blessing</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

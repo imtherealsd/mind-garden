@@ -284,6 +284,41 @@ export function TesterConsole({ state, onClose }) {
               </div>
             </div>
 
+            {/* Plus Member Toggle */}
+            <div className="p-3.5 rounded-2xl border border-amber-500/20 bg-amber-500/5 space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">Mind Garden Plus VIP</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${state.isPlusMember ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-800 text-slate-400'}`}>
+                  {state.isPlusMember ? 'VIP Active' : 'Free Tier'}
+                </span>
+              </div>
+              <button
+                onClick={() => state.setIsPlusMember(!state.isPlusMember)}
+                className="w-full py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-[10px] hover:bg-amber-400 transition-all cursor-pointer"
+              >
+                Toggle Plus / VIP Membership ({state.isPlusMember ? 'Disable' : 'Enable'})
+              </button>
+            </div>
+
+            {/* Streak Adjuster */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-slate-400 font-bold tracking-wider uppercase">Habit Streak</span>
+                <span className="text-xs font-bold text-emerald-400">🔥 {state.streak} Days</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {[1, 3, 7].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => state.setStreak(s)}
+                    className="py-1.5 text-[10px] font-bold rounded-lg border border-white/5 text-slate-300 bg-white/5 hover:bg-white/10"
+                  >
+                    Set {s} Days
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Add Mock History Logs */}
             <div className="space-y-2">
               <span className="text-[10px] text-slate-400 font-bold tracking-wider uppercase">Data Generation</span>

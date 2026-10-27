@@ -1,8 +1,8 @@
 # ============================================================
-# Mind Garden - Production ProGuard / R8 Rules
+# Dimension Bird - Production ProGuard / R8 Rules
 # ============================================================
 
-# Preserve line numbers in crash stack traces
+# Preserve line numbers in crash stack traces (critical for Crashlytics)
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
 
@@ -10,7 +10,7 @@
 # Capacitor / WebView Bridge
 # ============================================================
 -keep class com.getcapacitor.** { *; }
--keep class com.mindgarden.app.** { *; }
+-keep class com.dimension.bird.** { *; }
 -keepclassmembers class * {
     @com.getcapacitor.annotation.* <methods>;
 }
@@ -19,6 +19,26 @@
 -keepclassmembers class * {
     public *;
 }
+
+# ============================================================
+# Firebase & Google Services
+# ============================================================
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+
+# Firebase Crashlytics
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes Exceptions
+
+# ============================================================
+# Google AdMob
+# ============================================================
+-keep class com.google.android.gms.ads.** { *; }
+-dontwarn com.google.android.gms.ads.**
+-keep public class com.google.ads.** { *; }
 
 # ============================================================
 # AndroidX
@@ -65,3 +85,4 @@
 -dontwarn org.bouncycastle.**
 -dontwarn org.conscrypt.**
 -dontwarn org.openjsse.**
+
